@@ -1,3 +1,26 @@
+const servicios = [
+    {
+        paseUnDia : 1000,
+        paseDosDias : 1900,
+        paseCuatroDias : 3700,
+        paseSieteDias : 6000
+    },
+
+    {
+        paseUnDia : 200,
+        paseDosDias : 380,
+        paseCuatroDias : 750,
+        paseSieteDias : 1300
+    },
+
+    {
+        equipoSki : 2000,
+        equipoSnowboard : 2500,
+        proteccionPersonal : 1000,
+        ropaNieve : 1750
+    }
+]
+
 function main(){
     let nombre = prompt("Por favor ingrese su nombre completo")
 
@@ -35,33 +58,29 @@ function main(){
             break
         }
     }
-
 }
 
 function ski() {
-    let paseUnDia = 1000
-    let paseDosDias = 1900
-    let paseCuatroDias = 3700
-    let paseSieteDias = 6000
+    const skiObj = servicios[0]
 
     let menuSki = parseInt(prompt(`Seleccione una de las siguientes opciones \n\n 1. Pase 1 día - ($1000)\n 2. Pase 2 días - ($1900)\n 3. Pase 4 días - ($3700)\n 4. Pase 7 días - ($6000)`))
 
     switch (menuSki) {
         case 1:
             alert("Usted seleccionó la opción 1: Pase 1 día")
-            return paseUnDia
+            return skiObj.paseUnDia
 
         case 2:
             alert("Usted seleccionó la opción 2: Pase 2 días")
-            return paseDosDias
+            return skiObj.paseDosDias
 
         case 3:
             alert("Usted seleccionó la opción 3: Pase 4 días")
-            return paseCuatroDias
+            return skiObj.paseCuatroDias
 
         case 4:
             alert("Usted seleccionó la opción 4: Pase 7 días")
-            return paseSieteDias
+            return skiObj.paseSieteDias
 
         default:
             alert("No ingreso una selección válida");
@@ -71,29 +90,26 @@ function ski() {
 }
 
 function peaton() {
-    let paseUnDia = 200
-    let paseDosDias = 380
-    let paseCuatroDias = 750
-    let paseSieteDias = 1300
+    const peatonObj = servicios[1]
 
     let menuPeaton = parseInt(prompt(`Seleccione una de las siguientes opciones \n\n 1. Pase 1 día - ($200)\n 2. Pase 2 días - ($380)\n 3. Pase 4 días - ($750)\n 4. Pase 7 días - ($1300)`))
 
     switch (menuPeaton) {
         case 1:
             alert("Usted seleccionó la opción 1: Pase 1 día")
-            return paseUnDia
+            return peatonObj.paseUnDia
 
         case 2:
             alert("Usted seleccionó la opción 2: Pase 2 días")
-            return paseDosDias
+            return peatonObj.paseDosDias
 
         case 3:
             alert("Usted seleccionó la opción 3: Pase 4 días")
-            return paseCuatroDias
+            return peatonObj.paseCuatroDias
 
         case 4:
             alert("Usted seleccionó la opción 4: Pase 7 días")
-            return paseSieteDias
+            return peatonObj.paseSieteDias
 
         default:
             alert("No ingreso una selección válida");
@@ -104,29 +120,26 @@ function peaton() {
 }
 
 function rental() {
-    let equipoSki = 2000
-    let equipoSnowboard = 2500
-    let proteccionPersonal = 1000
-    let ropaNieve = 1750
+    const rentalObj = servicios[2]
 
     let menuRental = parseInt(prompt(`Seleccione una de las siguientes opciones \n\n 1. Equipamento de Ski - ($2000)\n 2. Equipamento de snowboard - ($2500)\n 3. Equipo de seguridad personal - ($1000)\n 4. Ropa de nieve - ($1750)`))
 
     switch (menuRental) {
         case 1:
             alert("Usted seleccionó la opción 1: Equipamento de ski")
-            return equipoSki
+            return rentalObj.equipoSki
 
         case 2:
             alert("Usted seleccionó la opción 2: Equipamento de snowboard")
-            return equipoSnowboard
+            return rentalObj.equipoSnowboard
 
         case 3:
             alert("Usted seleccionó la opción 3: Equipo de seguridad personal")
-            return proteccionPersonal
+            return rentalObj.proteccionPersonal
 
         case 4:
             alert("Usted seleccionó la opción 4: Ropa de nieve")
-            return ropaNieve
+            return rentalObj.ropaNieve
 
         default:
             alert("No ingreso una selección válida");
@@ -169,3 +182,4 @@ function formaPago(precio) {
 }
 
 main()
+
