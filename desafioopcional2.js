@@ -7,39 +7,40 @@ class Orden {
     }
 }
 
-function pedido(){
-    let orden2 = []
-    for (let i = 1; i<=numeroComensales; i++){
-        let nombre = prompt (`Por favor ingrese el nombre del comensal`)
-        let pedido = parseInt(prompt(`Comensal ${i}, seleccione una opción: \n 1. Hamburguesa \n 2. Milanesa \n 3. Pancho \n 4. Choripan`))
+if (numeroComensales !== ""){
+    function pedido(){
+        let ordenLista = []
+        for (let i = 1; i<=numeroComensales; i++){
+            let nombre = prompt (`Por favor ingrese el nombre del comensal`)
+            let pedido = prompt(`Comensal ${i}, seleccione una opción escribiendo el nombre del plato elegido: \n1. Hamburguesa completa \n2. Milanesa napolitana \n3. Ñoquis a la bolognesa \n4. Pizza NY style`)
 
-        if (pedido === 1){
-            alert("Usted selecciono una burger")
-        } else if (pedido === 2){
-            alert ("Usted selecciono una  purasangre")
-        } else if (pedido === 3){
-            alert("Usted selecciono un panchito")
-        } else if (pedido === 4){
-            alert("Ustedes selecciono un chori")
-        } else {
-            alert("No ingreso una opción válida")
+            if ((nombre != "") && (pedido != "")){
+            let ordenARegistrar = new Orden(
+                nombre,
+                pedido,
+                )
+                ordenLista.push(ordenARegistrar)
+            }
+            else{
+                alert("Usted no ingreso una opción válida")
+                break
+            }
         }
+            
+        return ordenLista
+    }
 
-        let ordenARegistrar = new Orden(
-            nombre,
-            pedido,
-            );
-            orden2.push(ordenARegistrar);
+
+    function main() {
+        let pedidoFinal = pedido()
+
+        for ( i = 0; i < pedidoFinal.length; i++){
+        alert (`Hola ${pedidoFinal[i].nombre}, su selección ha sido ${pedidoFinal[i].pedido}`)
+        }
     }
         
-    return orden2
+    main()
 }
-
-
-function main() {
-    let pedidoFinal = pedido()
-    console.log(pedidoFinal)
-    alert(`Su orden es: \n\n${pedidoFinal[0]} \n${pedidoFinal[1]}`)
+else{
+    alert("por favor ingrese el número de comensales")
 }
-    
-main();
