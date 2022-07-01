@@ -37,6 +37,7 @@ if (numeroComensales !== ""){
         for ( i = 0; i < pedidoFinal.length; i++){
         alert (`Hola ${pedidoFinal[i].nombre}, su selección ha sido ${pedidoFinal[i].pedido}`)
         }
+        console.log(pedidoFinal)
     }
         
     main()
