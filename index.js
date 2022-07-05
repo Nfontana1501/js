@@ -24,7 +24,7 @@ const pases = pasesSki.concat(pasesPeaton)
 const productosTotales = pases.concat(equipos)
 
 let nombreUsuario = prompt("Por favor ingrese su nombre completo")
-let numeroServicios = parseInt(prompt(`Bienvenido/a ${nombreUsuario} al sector de ventas de pases y rental del Cerro Patagonia, en esta sección encontrará los siguiente servicios disponibles: \n\n. Pases de Ski \n. Pases de peaton \n. Rental de equipamento y ropa de nieve \n\nPor favor indique la cantidad de servicios que desea contratar`))
+let numeroServicios = prompt(`Bienvenido/a ${nombreUsuario} al sector de ventas de pases y rental del Cerro Patagonia, en esta sección encontrará los siguiente servicios disponibles: \n\n. Pases de Ski \n. Pases de peaton \n. Rental de equipamento y ropa de nieve \n\nPor favor indique (escribiendo el número) la cantidad de servicios que desea contratar`)
 
 
 class Servicio {
@@ -34,7 +34,7 @@ class Servicio {
     }
 }
 
-if ((numeroServicios !== "" && nombreUsuario !== "")){
+if ((numeroServicios !== "") && (nombreUsuario !== "")){
     function main() {
 
             let pedidoFinal = pedido()
@@ -67,7 +67,8 @@ function pedido(){
     let serviciosLista = []
     let servicioARegistrar = 0
 
-    buclePedido: for (let i = 1; i<=numeroServicios; i++){
+    buclePedido: 
+    for (let i = 1; i<=numeroServicios; i++){
         let nombreServicio = parseInt(prompt(`Seleccione que tipo de servicio desea adquirir \n\n1. Pases de ski \n2. Pases de peatón \n3. Rental \n4. Salir`))
 
         switch (nombreServicio){
@@ -99,6 +100,7 @@ function pedido(){
                 break
 
             case 4:
+                serviciosLista = []
                 alert("Usted ha decidido salir, gracias por visitar el sector de ventas del cerro patagonia")
                 break buclePedido
 
@@ -181,7 +183,6 @@ function peaton() {
             peaton()
             break
     }
-
 }
 
 function rental() {
