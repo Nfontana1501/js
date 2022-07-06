@@ -23,6 +23,9 @@ const pases = pasesSki.concat(pasesPeaton)
 
 const productosTotales = pases.concat(equipos)
 
+let contenedorlista = document.getElementById("container__lista")
+let contenedorRecibo = document.getElementById("container__recibo")
+
 let nombreUsuario = prompt("Por favor ingrese su nombre completo")
 let numeroServicios = prompt(`Bienvenido/a ${nombreUsuario} al sector de ventas de pases y rental del Cerro Patagonia, en esta sección encontrará los siguiente servicios disponibles: \n\n. Pases de Ski \n. Pases de peaton \n. Rental de equipamento y ropa de nieve \n\nPor favor indique (escribiendo el número) la cantidad de servicios que desea contratar`)
 
@@ -42,13 +45,17 @@ if ((numeroServicios !== "") && (nombreUsuario !== "")){
 
             condicionMain: 
             if (pedidoFinal.length > 0){
-                alert("Usted ha seleccionado los siguientes servicios en su carrito")
-                for (const producto of pedidoFinal) {
-                    alert (producto.nombre)
+
+                for (const item of pedidoFinal) {
+                    let itemLista = document.createElement("li")
+                    itemLista.innerHTML = `<b>Nombre del servicio contratado:</b> ${item.nombre}  -  <b>Precio del servicio contratado:</b> $${item.precio}`
+                    contenedorlista.appendChild(itemLista)
                 }
 
                 let precioFinal = pedidoFinal.reduce((acumulador, elemento) => acumulador + elemento.precio, 0)
-                console.log(precioFinal)
+                let recibo = document.createElement("h4")
+                    recibo.innerHTML = `<b>El valor total de los servicios contratados es de:</b> $${precioFinal}`
+                    contenedorRecibo.appendChild(recibo)
 
                 formaPago(precioFinal)
             }
