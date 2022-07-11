@@ -48,16 +48,17 @@ if ((numeroServicios !== "") && (nombreUsuario !== "")){
 
                 for (const item of pedidoFinal) {
                     let itemLista = document.createElement("li")
-                    itemLista.innerHTML = `<b>Nombre del servicio contratado:</b> ${item.nombre}  -  <b>Precio del servicio contratado:</b> $${item.precio}`
+                    itemLista.innerHTML = `<b>Nombre del servicio seleccionado:</b> ${item.nombre}  -  <b>Precio del servicio seleccionado:</b> $${item.precio}`
                     contenedorlista.appendChild(itemLista)
                 }
 
                 let precioFinal = pedidoFinal.reduce((acumulador, elemento) => acumulador + elemento.precio, 0)
-                let recibo = document.createElement("h4")
-                    recibo.innerHTML = `<b>El valor total de los servicios contratados es de:</b> $${precioFinal}`
+                let boton = document.getElementById("btn")
+                boton.onclick = () => {
+                    let recibo = document.createElement("h4")
+                    recibo.innerHTML = `<b>El valor total de los servicios seleccionados es de:</b> $${formaPago(precioFinal)}`
                     contenedorRecibo.appendChild(recibo)
-
-                formaPago(precioFinal)
+                }
             }
             else {
                 break condicionMain
@@ -239,20 +240,17 @@ function formaPago(precioFinal) {
         case 1:
             alert('Usted tiene un 10% de descuento')
             let pagoEfectivo = 0.9
-            alert(`Su pago es de: ${valorProducto(precioFinal, pagoEfectivo)}`)
-            break
+            return valorProducto(precioFinal, pagoEfectivo)
 
         case 2:
             alert('Usted no tiene descuento')
             let pagoDebito = 1.0
-            alert(`Su pago es de: ${valorProducto(precioFinal, pagoDebito)}`)
-            break
+            return valorProducto(precioFinal, pagoDebito)
 
         case 3:
             alert('Usted tiene un 5% de recargo')
             let pagoCredito = 1.05
-            alert(`Su pago es de: ${valorProducto(precioFinal, pagoCredito)}`)
-            break
+            return valorProducto(precioFinal, pagoCredito)
 
         default:
             alert("No ingreso una selección válida")
