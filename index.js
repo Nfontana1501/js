@@ -1,260 +1,182 @@
 const pasesSki = [
-    {nombre: "Pase ski un día", valor : 1000},
-    {nombre: "Pase ski dos días", valor : 1900},
-    {nombre: "Pase ski cuatro días", valor : 3700},
-    {nombre: "Pase ski siete días", valor : 6000}
+    {id: 1, nombre: "Pase ski un día", valor : 1000},
+    {id: 2, nombre: "Pase ski dos días", valor : 1900},
+    {id: 3, nombre: "Pase ski cuatro días", valor : 3700},
+    {id: 4, nombre: "Pase ski siete días", valor : 6000}
 ]
 
 const pasesPeaton = [
-    {nombre: "Pase peatón un día", valor : 200},
-    {nombre: "Pase peatón dos días", valor : 380},
-    {nombre: "Pase peatón cuatro días", valor : 750},
-    {nombre: "Pase peatón siete días", valor : 1300}
+    {id: 5, nombre: "Pase peatón un día", valor : 200},
+    {id: 6, nombre: "Pase peatón dos días", valor : 380},
+    {id: 7, nombre: "Pase peatón cuatro días", valor : 750},
+    {id: 8, nombre: "Pase peatón siete días", valor : 1300}
 ]
 
 const equipos = [
-    {nombre: "Equipo de ski", valor : 2000},
-    {nombre: "Equipo de snowboard", valor : 2500},
-    {nombre: "Equipo de protección personal", valor : 1000},
-    {nombre: "Ropa de nieve", valor : 1750}
+    {id: 9, nombre: "Equipo de ski", valor : 2000},
+    {id: 10, nombre: "Equipo de snowboard", valor : 2500},
+    {id: 11, nombre: "Equipo de protección personal", valor : 1000},
+    {id: 12, nombre: "Ropa de nieve", valor : 1750}
 ]
 
-const pases = pasesSki.concat(pasesPeaton)
+const pases = pasesSki.concat(pasesPeaton);
+const productosTotales = pases.concat(equipos);
 
-const productosTotales = pases.concat(equipos)
-
-let contenedorlista = document.getElementById("container__lista")
-let contenedorRecibo = document.getElementById("container__recibo")
-
-let nombreUsuario = prompt("Por favor ingrese su nombre completo")
-let numeroServicios = prompt(`Bienvenido/a ${nombreUsuario} al sector de ventas de pases y rental del Cerro Patagonia, en esta sección encontrará los siguiente servicios disponibles: \n\n. Pases de Ski \n. Pases de peaton \n. Rental de equipamento y ropa de nieve \n\nPor favor indique (escribiendo el número) la cantidad de servicios que desea contratar`)
-
-
-class Servicio {
-    constructor(nombre, precio) {
-        this.nombre = nombre;
-        this.precio = precio;
+class Carrito {
+    constructor(id) {
+        this.id = id;
+        this.productos = [];
     }
-}
 
-if ((numeroServicios !== "") && (nombreUsuario !== "")){
-    function main() {
-
-            let pedidoFinal = pedido()
-            console.log(pedidoFinal)
-
-            condicionMain: 
-            if (pedidoFinal.length > 0){
-
-                for (const item of pedidoFinal) {
-                    let itemLista = document.createElement("li")
-                    itemLista.innerHTML = `<b>Nombre del servicio seleccionado:</b> ${item.nombre}  -  <b>Precio del servicio seleccionado:</b> $${item.precio}`
-                    contenedorlista.appendChild(itemLista)
-                }
-
-                let precioFinal = pedidoFinal.reduce((acumulador, elemento) => acumulador + elemento.precio, 0)
-                let boton = document.getElementById("btn")
-                boton.onclick = () => {
-                    let recibo = document.createElement("h4")
-                    recibo.innerHTML = `<b>El valor total de los servicios seleccionados es de:</b> $${formaPago(precioFinal)}`
-                    contenedorRecibo.appendChild(recibo)
-                }
-            }
-            else {
-                break condicionMain
-            }
+    calcularTotal() {
+        let total = 0;
+        for(let i = 0; i < this.productos.length; i++) {
+            total = total + this.productos[i].valor;
+        }
+        return total;
     }
-        
-    main()
-}
-else {
-    alert("Por favor ingrese su nombre completo y la cantidad de servicios que desea contratar")
+
 }
 
-function pedido(){
-    let serviciosLista = []
-    let servicioARegistrar = 0
+let formulario;
+let inputNombre;
+let inputApellido;
+let inputServicio;
+let cards;
+let tablaCarrito;
+let tablaBody;
+let botones;
+let eliminar;
+let finalizar;
 
-    buclePedido: 
-    for (let i = 1; i<=numeroServicios; i++){
-        let nombreServicio = parseInt(prompt(`Seleccione que tipo de servicio desea adquirir \n\n1. Pases de ski \n2. Pases de peatón \n3. Rental \n4. Salir`))
+function inicializarElementos(){
+    formulario = document.getElementById("formulario");
+    inputNombre = document.getElementById("inputNombre");
+    inputApellido = document.getElementById("inputApellido");
+    inputServicio = document.getElementById("inputServicio");
+    cards = document.getElementById("cards");
+    tablaCarrito = document.getElementById("tablaCarrito");
+    tablaBody = document.getElementById("tBody")
+    botones = document.getElementsByClassName("compra");
+    eliminar = document.getElementById("eliminar")
+    finalizar = document.getElementById("finalizar")
+}
 
-        switch (nombreServicio){
-            case 1: 
-                ski()
-                    servicioARegistrar = new Servicio(
-                    nombre,
-                    precio,
-                    )
-                serviciosLista.push(servicioARegistrar)
-                break
+function inicializarEventos() {
+    formulario.onsubmit = (event) => validarFormulario(event);
+    }
 
-            case 2:
-                peaton()
-                    servicioARegistrar = new Servicio(
-                    nombre,
-                    precio,
-                    )
-                serviciosLista.push(servicioARegistrar)
-                break
-            
-            case 3:
-                rental()
-                    servicioARegistrar = new Servicio(
-                    nombre,
-                    precio,
-                    )
-                serviciosLista.push(servicioARegistrar)
-                break
+function validarFormulario(event) {
+    event.preventDefault();
+    let nombre = inputNombre.value;
+    let apellido = inputApellido.value;
+    let servicio = inputServicio.value;
 
-            case 4:
-                serviciosLista = []
-                alert("Usted ha decidido salir, gracias por visitar el sector de ventas del cerro patagonia")
-                break buclePedido
+    if ((servicio === "Pases Ski") && (nombre !== "") && (apellido !== "")){
+        cards.innerHTML = "";
+        pasesSki.forEach(producto => {
+        cards.innerHTML += renderCard(producto);
+        })
+    }
+    else if ((servicio === "Pases Peaton") && (nombre !== "") && (apellido !== "")){
+        cards.innerHTML = "";
+        pasesPeaton.forEach(producto => {
+        cards.innerHTML += renderCard(producto);
+        })
+    }
+    else if ((servicio === "Rental") && (nombre !== "") && (apellido !== "")){
+        cards.innerHTML = "";
+        equipos.forEach(producto => {
+        cards.innerHTML += renderCard(producto);
+        })
+    }
 
-            default:
-                alert ("Usted no ha ingresado una opción válida")
-                break
+    formulario.reset();
+
+    let st = actualizarCarrito();
+    agregarCarrito(st);
+    
+    eliminar.onclick = () => {eliminarCarrito()};
+    
+}
+
+function renderCard(servicio) {
+    let cardRendered = `    
+    <div class="card col-lg-5 col-md-5 m-3" style="width: 18rem;">
+        <div class="card-body col-lg-12">
+            <h5 class="card-title">${servicio.id}. ${servicio.nombre}</h5>
+            <p class="card-text">$ ${servicio.valor}</p>
+            <a href="#" class="btn btn-primary compra" id="${servicio.id}">Agregar al carrito</a>
+        </div>
+    </div>
+    `;
+    return cardRendered;
+}
+
+function agregarCarrito (st) {
+    let carrito = new Carrito(1);
+    if(st !== null){
+        for (const item of st.productos) {
+            carrito.productos.push(item);
+            limpiarCarrito();
+            renderizarCarrito(carrito);
+            renovarStorage(carrito);
         }
     }
-    return serviciosLista
+
+    let arrayDeBotones = Array.from(botones);
+    arrayDeBotones.forEach(boton => {
+        boton.addEventListener("click", (e) => {
+            let productoSeleccionado = productosTotales.find(producto => producto.id == e.target.id);
+            carrito.productos.push(productoSeleccionado);
+            limpiarCarrito();
+            renderizarCarrito(carrito);
+            renovarStorage(carrito);
+        })
+    })
 }
 
-
-function ski() {
-
-    let menuSki = parseInt(prompt(`Seleccione una de las siguientes opciones \n\n 1. Pase 1 día - ($1000)\n 2. Pase 2 días - ($1900)\n 3. Pase 4 días - ($3700)\n 4. Pase 7 días - ($6000)`))
-
-    switch (menuSki) {
-        case 1:
-            alert("Usted seleccionó la opción 1: Pase 1 día")
-            nombre = productosTotales[0].nombre
-            precio = productosTotales[0].valor
-            return nombre, precio
-
-        case 2:
-            alert("Usted seleccionó la opción 2: Pase 2 días")
-            nombre = productosTotales[1].nombre
-            precio = productosTotales[1].valor
-            return nombre, precio
-
-        case 3:
-            alert("Usted seleccionó la opción 3: Pase 4 días")
-            nombre = productosTotales[2].nombre
-            precio = productosTotales[2].valor
-            return nombre, precio
-
-        case 4:
-            alert("Usted seleccionó la opción 4: Pase 7 días")
-            nombre = productosTotales[3].nombre
-            precio = productosTotales[3].valor
-            return nombre, precio
-
-        default:
-            alert("No ingreso una selección válida");
-            ski()
-            break
-    }
+function actualizarCarrito (){
+    let storage = JSON.parse(localStorage.getItem("carrito"));
+    localStorage.removeItem("carrito"); 
+    return storage
 }
 
-function peaton() {
-
-    let menuPeaton = parseInt(prompt(`Seleccione una de las siguientes opciones \n\n 1. Pase 1 día - ($200)\n 2. Pase 2 días - ($380)\n 3. Pase 4 días - ($750)\n 4. Pase 7 días - ($1300)`))
-
-    switch (menuPeaton) {
-        case 1:
-            alert("Usted seleccionó la opción 1: Pase 1 día")
-            nombre = productosTotales[4].nombre
-            precio = productosTotales[4].valor
-            return nombre, precio
-
-        case 2:
-            alert("Usted seleccionó la opción 2: Pase 2 días")
-            nombre = productosTotales[5].nombre
-            precio = productosTotales[5].valor
-            return nombre, precio
-
-        case 3:
-            alert("Usted seleccionó la opción 3: Pase 4 días")
-            nombre = productosTotales[6].nombre
-            precio = productosTotales[6].valor
-            return nombre, precio
-
-        case 4:
-            alert("Usted seleccionó la opción 4: Pase 7 días")
-            nombre = productosTotales[7].nombre
-            precio = productosTotales[7].valor
-            return nombre, precio
-
-        default:
-            alert("No ingreso una selección válida");
-            peaton()
-            break
-    }
+function renovarStorage(carrito) {
+    localStorage.removeItem("carrito"); 
+    localStorage.setItem("carrito", JSON.stringify(carrito));
 }
 
-function rental() {
-
-    let menuRental = parseInt(prompt(`Seleccione una de las siguientes opciones \n\n 1. Equipamento de Ski - ($2000)\n 2. Equipamento de snowboard - ($2500)\n 3. Equipo de seguridad personal - ($1000)\n 4. Ropa de nieve - ($1750)`))
-
-    switch (menuRental) {
-        case 1:
-            alert("Usted seleccionó la opción 1: Equipamento de ski")
-            nombre = productosTotales[8].nombre
-            precio = productosTotales[8].valor
-            return nombre, precio
-
-        case 2:
-            alert("Usted seleccionó la opción 2: Equipamento de snowboard")
-            nombre = productosTotales[9].nombre
-            precio = productosTotales[9].valor
-            return nombre, precio
-
-        case 3:
-            alert("Usted seleccionó la opción 3: Equipo de seguridad personal")
-            nombre = productosTotales[10].nombre
-            precio = productosTotales[10].valor
-            return nombre, precio
-
-        case 4:
-            alert("Usted seleccionó la opción 4: Ropa de nieve")
-            nombre = productosTotales[11].nombre
-            precio = productosTotales[11].valor
-            return nombre, precio
-
-        default:
-            alert("No ingreso una selección válida");
-            rental()
-            break
-    }
+function limpiarCarrito() {
+    tablaCarrito.innerHTML = "";
 }
 
-function valorProducto(producto, formaPago){
-    return parseInt(producto * formaPago)
+function eliminarCarrito() {
+    tablaCarrito.innerHTML = "";
+    localStorage.clear();
 }
 
-function formaPago(precioFinal) {
-    let medioPago = parseInt(prompt("Elija su medio de pago:\n\n 1. Efectivo / Transferencia\n 2. Tarjeta de débito\n 3. Tarjeta de crédito \n\n El pago en efectivo o transferencia, tiene un 10% de descuento\n El pago con tarjeta de crédito, tiene un 5% de recargo"))
+function renderizarCarrito(carrito) {
+    carrito.productos.forEach(producto => {
+        let filaTabla = document.createElement("tr");
+        filaTabla.innerHTML = `
+            <td class="text-center">${producto.id}</td>
+            <td class="text-center">${producto.nombre}</td>
+            <td class="text-center">${producto.valor}</td>`;
+            tablaCarrito.appendChild(filaTabla);
+    })
 
-    switch (medioPago) {
-        case 1:
-            alert('Usted tiene un 10% de descuento')
-            let pagoEfectivo = 0.9
-            return valorProducto(precioFinal, pagoEfectivo)
-
-        case 2:
-            alert('Usted no tiene descuento')
-            let pagoDebito = 1.0
-            return valorProducto(precioFinal, pagoDebito)
-
-        case 3:
-            alert('Usted tiene un 5% de recargo')
-            let pagoCredito = 1.05
-            return valorProducto(precioFinal, pagoCredito)
-
-        default:
-            alert("No ingreso una selección válida")
-            pagar()
-            break
-    }
+    let filaTotal = document.createElement("tr")
+    filaTotal.innerHTML = `
+        <td class="text-center"><b>Subtotal</b></td>
+        <td class=""></td>
+        <td class="text-center"><b>${carrito.calcularTotal()}</b></td>`
+    tablaCarrito.appendChild(filaTotal);
 }
+
+function main (){
+    inicializarElementos();
+    inicializarEventos();
+}
+
+main();
