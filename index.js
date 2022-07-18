@@ -35,7 +35,6 @@ class Carrito {
         }
         return total;
     }
-
 }
 
 let formulario;
@@ -48,6 +47,9 @@ let tablaBody;
 let botones;
 let eliminar;
 let finalizar;
+let totalCompra;
+let precioFinalCompra;
+
 
 function inicializarElementos(){
     formulario = document.getElementById("formulario");
@@ -56,10 +58,12 @@ function inicializarElementos(){
     inputServicio = document.getElementById("inputServicio");
     cards = document.getElementById("cards");
     tablaCarrito = document.getElementById("tablaCarrito");
-    tablaBody = document.getElementById("tBody")
+    tablaBody = document.getElementById("tBody");
     botones = document.getElementsByClassName("compra");
-    eliminar = document.getElementById("eliminar")
-    finalizar = document.getElementById("finalizar")
+    eliminar = document.getElementById("eliminar");
+    finalizar = document.getElementById("finalizar");
+    totalCompra = document.getElementById("totalCompra");
+    precioFinalCompra = document.getElementById("precioFinalCompra");
 }
 
 function inicializarEventos() {
@@ -92,12 +96,8 @@ function validarFormulario(event) {
     }
 
     formulario.reset();
-
     let st = actualizarCarrito();
     agregarCarrito(st);
-    
-    eliminar.onclick = () => {eliminarCarrito()};
-    
 }
 
 function renderCard(servicio) {
@@ -134,12 +134,15 @@ function agregarCarrito (st) {
             renovarStorage(carrito);
         })
     })
+
+    eliminar.onclick = () => {eliminarCarrito()};
+    finalizar.onclick = () => {finalizarCompra(carrito), formaPago(carrito)};
 }
 
 function actualizarCarrito (){
     let storage = JSON.parse(localStorage.getItem("carrito"));
     localStorage.removeItem("carrito"); 
-    return storage
+    return storage;
 }
 
 function renovarStorage(carrito) {
@@ -156,6 +159,55 @@ function eliminarCarrito() {
     localStorage.clear();
 }
 
+function finalizarCompra(carrito){
+    let finalDeCompra = document.createElement("h3");
+    totalCompra.innerHTML = "";
+    finalDeCompra.innerHTML = `
+        El valor parcial de su carrito es de: <b>${carrito.calcularTotal()}</b>. Para proceder con el pago, por favor seleccione el medio de pago que desea utilizar.
+    `;
+    totalCompra.appendChild(finalDeCompra);
+
+    let divtotal = document.createElement("div");
+    divtotal.innerHTML = `
+        <button type="submit" id="efectivo" class="btn btn-primary mt-5 mb-5 align-self-center" id="">Efectivo - 10% de descuento</button>
+        <button type="submit" id="debito" class="btn btn-primary mt-5 mb-5 align-self-center" id="">Tarjeta de débito - No aplica descuento</button>
+        <button type="submit" id="credito" class="btn btn-primary mt-5 mb-5 align-self-center" id="">Tarjeta de crédito - 5% de recargo</button>`;
+    totalCompra.appendChild(divtotal);
+}
+
+function formaPago (carrito) {
+
+    let efectivo = document.getElementById("efectivo");
+    let debito = document.getElementById("debito");
+    let credito = document.getElementById("credito");
+
+    efectivo.onclick = () => {
+        precioFinalCompra.innerHTML = "";
+        let precioCarrito = document.createElement("h3");
+        precioCarrito.innerHTML = `
+            El valor total de su compra es de: <b>${carrito.calcularTotal()*0.9}</b>.`;
+        precioFinalCompra.appendChild(precioCarrito);
+    };
+
+    debito.onclick = () => {
+        precioFinalCompra.innerHTML = "";
+        let precioCarrito = document.createElement("h3");
+        precioCarrito.innerHTML = `
+            El valor total de su compra es de: <b>${carrito.calcularTotal()*1.0}</b>.`;
+        precioFinalCompra.appendChild(precioCarrito);
+    };
+
+    credito.onclick = () => {
+        precioFinalCompra.innerHTML = "";
+        let precioCarrito = document.createElement("h3");
+        precioCarrito.innerHTML = `
+            El valor total de su compra es de: <b>${carrito.calcularTotal()*1.05}</b>.`;
+        precioFinalCompra.appendChild(precioCarrito);
+    };
+
+    eliminarCarrito();
+}
+
 function renderizarCarrito(carrito) {
     carrito.productos.forEach(producto => {
         let filaTabla = document.createElement("tr");
@@ -166,11 +218,11 @@ function renderizarCarrito(carrito) {
             tablaCarrito.appendChild(filaTabla);
     })
 
-    let filaTotal = document.createElement("tr")
+    let filaTotal = document.createElement("tr");
     filaTotal.innerHTML = `
         <td class="text-center"><b>Subtotal</b></td>
         <td class=""></td>
-        <td class="text-center"><b>${carrito.calcularTotal()}</b></td>`
+        <td class="text-center"><b>${carrito.calcularTotal()}</b></td>`;
     tablaCarrito.appendChild(filaTotal);
 }
 
