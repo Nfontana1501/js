@@ -94,6 +94,13 @@ function validarFormulario(event) {
         cards.innerHTML += renderCard(producto);
         })
     }
+    else{
+        Swal.fire({
+            icon: 'error',
+            title: 'Algo ha salido mal',
+            text: 'Por favor complete los datos requeridos en el formulario',
+        })
+    }
 
     formulario.reset();
     let st = actualizarCarrito();
@@ -181,28 +188,29 @@ function formaPago (carrito) {
     let debito = document.getElementById("debito");
     let credito = document.getElementById("credito");
 
+
     efectivo.onclick = () => {
-        precioFinalCompra.innerHTML = "";
-        let precioCarrito = document.createElement("h3");
-        precioCarrito.innerHTML = `
-            El valor total de su compra es de: <b>${carrito.calcularTotal()*0.9}</b>.`;
-        precioFinalCompra.appendChild(precioCarrito);
+        Swal.fire({
+            icon: 'success',
+            title: `El valor total de su compra es de: <b>${carrito.calcularTotal()*0.9}</b>`,
+            text: 'Su compra ha sido exitosa!',
+        })
     };
 
     debito.onclick = () => {
-        precioFinalCompra.innerHTML = "";
-        let precioCarrito = document.createElement("h3");
-        precioCarrito.innerHTML = `
-            El valor total de su compra es de: <b>${carrito.calcularTotal()*1.0}</b>.`;
-        precioFinalCompra.appendChild(precioCarrito);
+        Swal.fire({
+            icon: 'success',
+            title: `El valor total de su compra es de: <b>${carrito.calcularTotal()*1.0}</b>`,
+            text: 'Su compra ha sido exitosa!',
+        })
     };
 
     credito.onclick = () => {
-        precioFinalCompra.innerHTML = "";
-        let precioCarrito = document.createElement("h3");
-        precioCarrito.innerHTML = `
-            El valor total de su compra es de: <b>${carrito.calcularTotal()*1.05}</b>.`;
-        precioFinalCompra.appendChild(precioCarrito);
+        Swal.fire({
+            icon: 'success',
+            title: `El valor total de su compra es de: <b>${carrito.calcularTotal()*1.05}</b>`,
+            text: 'Su compra ha sido exitosa!',
+        })
     };
 
     eliminarCarrito();
