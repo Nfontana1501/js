@@ -1,0 +1,6 @@
+[
+    {"id": 1, "nombre": "Pase ski un día", "valor" : 1000},
+    {"id": 2, "nombre": "Pase ski dos días", "valor" : 1900},
+    {"id": 3, "nombre": "Pase ski cuatro días", "valor" : 3700},
+    {"id": 4, "nombre": "Pase ski siete días", "valor" : 6000}
+]

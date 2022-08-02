@@ -240,3 +240,13 @@ function main (){
 }
 
 main();
+
+(async function (){
+    async function obtenerArray() {
+        const res = await fetch("/data.json");
+        const data = await res.json();
+        return data;
+        }
+    const datos = await obtenerArray();
+    console.log(datos)
+    })();
