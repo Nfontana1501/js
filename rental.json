@@ -1,0 +1,6 @@
+[
+    {"id": 9, "nombre": "Equipo de ski", "valor" : 2000},
+    {"id": 10, "nombre": "Equipo de snowboard", "valor" : 2500},
+    {"id": 11, "nombre": "Equipo de protección personal", "valor" : 1000},
+    {"id": 12, "nombre": "Ropa de nieve", "valor" : 1750}
+]

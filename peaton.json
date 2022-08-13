@@ -1,0 +1,6 @@
+[
+    {"id": 5, "nombre": "Pase peatón un día", "valor" : 200},
+    {"id": 6, "nombre": "Pase peatón dos días", "valor" : 380},
+    {"id": 7, "nombre": "Pase peatón cuatro días", "valor" : 750},
+    {"id": 8, "nombre": "Pase peatón siete días", "valor" : 1300}
+]

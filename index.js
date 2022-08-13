@@ -12,15 +12,20 @@ const pasesPeaton = [
     {id: 8, nombre: "Pase peatón siete días", valor : 1300}
 ]
 
-const equipos = [
-    {id: 9, nombre: "Equipo de ski", valor : 2000},
-    {id: 10, nombre: "Equipo de snowboard", valor : 2500},
-    {id: 11, nombre: "Equipo de protección personal", valor : 1000},
-    {id: 12, nombre: "Ropa de nieve", valor : 1750}
-]
+const equipos = []
+console.log(equipos)
+
+class Equipo {
+    constructor(id, nombre, valor) {
+        this.id = id;
+        this.nombre = nombre;
+        this.valor = valor;
+    }
+}
 
 const pases = pasesSki.concat(pasesPeaton);
 const productosTotales = pases.concat(equipos);
+console.log(productosTotales)
 
 class Carrito {
     constructor(id) {
@@ -234,19 +239,21 @@ function renderizarCarrito(carrito) {
     tablaCarrito.appendChild(filaTotal);
 }
 
-function main (){
+async function main (){
     inicializarElementos();
     inicializarEventos();
+    await obtenerArrayRental();
 }
 
 main();
 
-(async function (){
-    async function obtenerArray() {
-        const res = await fetch("/data.json");
-        const data = await res.json();
-        return data;
-        }
-    const datos = await obtenerArray();
-    console.log(datos)
-    })();
+
+
+async function obtenerArrayRental() {
+    const res = await fetch("rental.json");
+    const data = await res.json();
+    data.forEach(item => {
+        let equipo = new Equipo (item.id, item.nombre, item.valor);
+        equipos.push(equipo);
+        })
+    }
