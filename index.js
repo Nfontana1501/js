@@ -1,19 +1,12 @@
-const pasesSki = [
-    {id: 1, nombre: "Pase ski un día", valor : 1000},
-    {id: 2, nombre: "Pase ski dos días", valor : 1900},
-    {id: 3, nombre: "Pase ski cuatro días", valor : 3700},
-    {id: 4, nombre: "Pase ski siete días", valor : 6000}
-]
-
-const pasesPeaton = [
-    {id: 5, nombre: "Pase peatón un día", valor : 200},
-    {id: 6, nombre: "Pase peatón dos días", valor : 380},
-    {id: 7, nombre: "Pase peatón cuatro días", valor : 750},
-    {id: 8, nombre: "Pase peatón siete días", valor : 1300}
-]
-
+const pasesSki = []
+const pasesPeaton = []
 const equipos = []
+const productosTotales = []
+
 console.log(equipos)
+console.log(pasesPeaton)
+console.log(pasesSki)
+console.log(productosTotales)
 
 class Equipo {
     constructor(id, nombre, valor) {
@@ -23,9 +16,51 @@ class Equipo {
     }
 }
 
-const pases = pasesSki.concat(pasesPeaton);
-const productosTotales = pases.concat(equipos);
-console.log(productosTotales)
+class Ski {
+    constructor(id, nombre, valor) {
+        this.id = id;
+        this.nombre = nombre;
+        this.valor = valor;
+    }
+}
+
+class Peaton {
+    constructor(id, nombre, valor) {
+        this.id = id;
+        this.nombre = nombre;
+        this.valor = valor;
+    }
+}
+
+async function obtenerArrayRental() {
+    const res = await fetch("rental.json");
+    const data = await res.json();
+    data.forEach(item => {
+        let equipo = new Equipo (item.id, item.nombre, item.valor);
+        equipos.push(equipo)
+        productosTotales.push(equipo);
+        })
+}
+
+async function obtenerArrayski() {
+    const res = await fetch("ski.json");
+    const data = await res.json();
+    data.forEach(item => {
+        let equipo = new Ski (item.id, item.nombre, item.valor);
+        pasesSki.push(equipo)
+        productosTotales.push(equipo);
+        })
+}
+
+async function obtenerArrayPeaton() {
+    const res = await fetch("peaton.json");
+    const data = await res.json();
+    data.forEach(item => {
+        let equipo = new Peaton (item.id, item.nombre, item.valor);
+        pasesPeaton.push(equipo)
+        productosTotales.push(equipo);
+        })
+}
 
 class Carrito {
     constructor(id) {
@@ -163,12 +198,14 @@ function renovarStorage(carrito) {
 }
 
 function limpiarCarrito() {
-    tablaCarrito.innerHTML = "";
+    tablaCarrito.innerHTML = ""
 }
 
 function eliminarCarrito() {
     tablaCarrito.innerHTML = "";
     localStorage.clear();
+    let st = actualizarCarrito();
+    agregarCarrito(st);
 }
 
 function finalizarCompra(carrito){
@@ -243,17 +280,8 @@ async function main (){
     inicializarElementos();
     inicializarEventos();
     await obtenerArrayRental();
+    await obtenerArrayPeaton();
+    await obtenerArrayski();
 }
 
-main();
-
-
-
-async function obtenerArrayRental() {
-    const res = await fetch("rental.json");
-    const data = await res.json();
-    data.forEach(item => {
-        let equipo = new Equipo (item.id, item.nombre, item.valor);
-        equipos.push(equipo);
-        })
-    }
+main(); 
