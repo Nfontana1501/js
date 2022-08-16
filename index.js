@@ -3,11 +3,6 @@ const pasesPeaton = []
 const equipos = []
 const productosTotales = []
 
-console.log(equipos)
-console.log(pasesPeaton)
-console.log(pasesSki)
-console.log(productosTotales)
-
 class Equipo {
     constructor(id, nombre, valor) {
         this.id = id;
@@ -30,36 +25,6 @@ class Peaton {
         this.nombre = nombre;
         this.valor = valor;
     }
-}
-
-async function obtenerArrayRental() {
-    const res = await fetch("rental.json");
-    const data = await res.json();
-    data.forEach(item => {
-        let equipo = new Equipo (item.id, item.nombre, item.valor);
-        equipos.push(equipo)
-        productosTotales.push(equipo);
-        })
-}
-
-async function obtenerArrayski() {
-    const res = await fetch("ski.json");
-    const data = await res.json();
-    data.forEach(item => {
-        let equipo = new Ski (item.id, item.nombre, item.valor);
-        pasesSki.push(equipo)
-        productosTotales.push(equipo);
-        })
-}
-
-async function obtenerArrayPeaton() {
-    const res = await fetch("peaton.json");
-    const data = await res.json();
-    data.forEach(item => {
-        let equipo = new Peaton (item.id, item.nombre, item.valor);
-        pasesPeaton.push(equipo)
-        productosTotales.push(equipo);
-        })
 }
 
 class Carrito {
@@ -143,8 +108,8 @@ function validarFormulario(event) {
     }
 
     formulario.reset();
-    let st = actualizarCarrito();
-    agregarCarrito(st);
+    let storageCargado = actualizarCarrito();
+    agregarCarrito(storageCargado);
 }
 
 function renderCard(servicio) {
@@ -160,10 +125,10 @@ function renderCard(servicio) {
     return cardRendered;
 }
 
-function agregarCarrito (st) {
+function agregarCarrito (storageCargado) {
     let carrito = new Carrito(1);
-    if(st !== null){
-        for (const item of st.productos) {
+    if(storageCargado !== null){
+        for (const item of storageCargado.productos) {
             carrito.productos.push(item);
             limpiarCarrito();
             renderizarCarrito(carrito);
@@ -174,6 +139,7 @@ function agregarCarrito (st) {
     let arrayDeBotones = Array.from(botones);
     arrayDeBotones.forEach(boton => {
         boton.addEventListener("click", (e) => {
+            productoAgregado(carrito);
             let productoSeleccionado = productosTotales.find(producto => producto.id == e.target.id);
             carrito.productos.push(productoSeleccionado);
             limpiarCarrito();
@@ -182,7 +148,7 @@ function agregarCarrito (st) {
         })
     })
 
-    eliminar.onclick = () => {eliminarCarrito()};
+    eliminar.onclick = () => {resetearCompra(carrito)};
     finalizar.onclick = () => {finalizarCompra(carrito), formaPago(carrito)};
 }
 
@@ -204,24 +170,51 @@ function limpiarCarrito() {
 function eliminarCarrito() {
     tablaCarrito.innerHTML = "";
     localStorage.clear();
-    let st = actualizarCarrito();
-    agregarCarrito(st);
+    let storageCargado = actualizarCarrito();
+    agregarCarrito(storageCargado);
+}
+
+function alertEliminar () {
+    eliminarCarrito();
+    Swal.fire({
+        icon: 'success',
+        title: 'Su carrito ha sido eliminado',
+    })
+}
+
+function alertVacio () {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Su carrito esta vacío',
+    })
+}
+
+function resetearCompra (carrito) {
+    carrito.calcularTotal() !== 0 ? alertEliminar()
+    : alertVacio();
 }
 
 function finalizarCompra(carrito){
-    let finalDeCompra = document.createElement("h3");
-    totalCompra.innerHTML = "";
-    finalDeCompra.innerHTML = `
-        El valor parcial de su carrito es de: <b>${carrito.calcularTotal()}</b>. Para proceder con el pago, por favor seleccione el medio de pago que desea utilizar.
-    `;
-    totalCompra.appendChild(finalDeCompra);
+    
+    if(carrito.calcularTotal() !== 0){
+        let finalDeCompra = document.createElement("h3");
+        totalCompra.innerHTML = "";
+        finalDeCompra.innerHTML = `<h3 class="text-center">
+            El valor parcial de su carrito es de: <b>${carrito.calcularTotal()}</b>. Para proceder con el pago, por favor seleccione el medio de pago que desea utilizar.
+            </h3>
+        `;
+        totalCompra.appendChild(finalDeCompra);
 
-    let divtotal = document.createElement("div");
-    divtotal.innerHTML = `
-        <button type="submit" id="efectivo" class="btn btn-primary mt-5 mb-5 align-self-center" id="">Efectivo - 10% de descuento</button>
-        <button type="submit" id="debito" class="btn btn-primary mt-5 mb-5 align-self-center" id="">Tarjeta de débito - No aplica descuento</button>
-        <button type="submit" id="credito" class="btn btn-primary mt-5 mb-5 align-self-center" id="">Tarjeta de crédito - 5% de recargo</button>`;
-    totalCompra.appendChild(divtotal);
+        let divTotal = document.createElement("div");
+        divTotal.className = "row col-md-12"
+        divTotal.innerHTML = `
+            <button type="submit" id="efectivo" class="btn btn-primary mt-5 mb-5 offset-md-1 col-md-3" id="">Efectivo - 10% de descuento</button>
+            <button type="submit" id="debito" class="btn btn-primary mt-5 mb-5 offset-md-1 col-md-3" id="">Tarjeta de débito - No aplica descuento</button>
+            <button type="submit" id="credito" class="btn btn-primary mt-5 mb-5 offset-md-1 col-md-3" id="">Tarjeta de crédito - 5% de recargo</button>`;
+        totalCompra.appendChild(divTotal);
+    } else {
+        alertVacio();
+    }
 }
 
 function formaPago (carrito) {
@@ -229,7 +222,6 @@ function formaPago (carrito) {
     let efectivo = document.getElementById("efectivo");
     let debito = document.getElementById("debito");
     let credito = document.getElementById("credito");
-
 
     efectivo.onclick = () => {
         Swal.fire({
@@ -274,6 +266,54 @@ function renderizarCarrito(carrito) {
         <td class=""></td>
         <td class="text-center"><b>${carrito.calcularTotal()}</b></td>`;
     tablaCarrito.appendChild(filaTotal);
+}
+
+function productoAgregado (){
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-right',
+        iconColor: 'white',
+        customClass: {
+        popup: 'colored-toast'
+        },
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true
+    })
+    Toast.fire({
+        icon: 'success',
+        title: `El producto ha sido agregado a su carrito`
+    })
+}
+
+async function obtenerArrayRental() {
+    const res = await fetch("rental.json");
+    const data = await res.json();
+    data.forEach(item => {
+        let equipo = new Equipo (item.id, item.nombre, item.valor);
+        equipos.push(equipo)
+        productosTotales.push(equipo);
+        })
+}
+
+async function obtenerArrayski() {
+    const res = await fetch("ski.json");
+    const data = await res.json();
+    data.forEach(item => {
+        let equipo = new Ski (item.id, item.nombre, item.valor);
+        pasesSki.push(equipo)
+        productosTotales.push(equipo);
+        })
+}
+
+async function obtenerArrayPeaton() {
+    const res = await fetch("peaton.json");
+    const data = await res.json();
+    data.forEach(item => {
+        let equipo = new Peaton (item.id, item.nombre, item.valor);
+        pasesPeaton.push(equipo)
+        productosTotales.push(equipo);
+        })
 }
 
 async function main (){
